@@ -1,4 +1,5 @@
 import requests
+from pprint import pprint
 import json
 from .models import CarDealer
 from requests.auth import HTTPBasicAuth
@@ -36,7 +37,8 @@ def get_dealers_from_cf(url, **kwargs):
     json_result = get_request(url)
     if json_result:
         # Get the row list in JSON as dealers
-        dealers = json_result["rows"]
+       
+        dealers = json_result["body"]
         # For each dealer object
         for dealer in dealers:
             # Get its content in `doc` object
