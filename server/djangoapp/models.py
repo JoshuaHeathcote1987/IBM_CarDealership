@@ -96,4 +96,4 @@ class DealerReview:
         self.sentiment = ""  # Watson NLU sentiment analysis of review
 
     def __str__(self):
-        return "Reviewer: " + self.name + " Review: " + self.review
+        return "Reviewer: " + self.name + " Review: " + self.review + " Sentiment: " + str(self.sentiment)
