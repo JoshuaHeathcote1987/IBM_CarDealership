@@ -1,7 +1,7 @@
 import requests
 from pprint import pprint
 import json
-from .models import CarDealer
+from .models import CarDealer,DealerReview
 from requests.auth import HTTPBasicAuth
 
 
@@ -21,6 +21,7 @@ def get_request(url, **kwargs):
     status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
+    pprint(json_data)
     return json_data
 
 # Create a `post_request` to make HTTP POST requests
@@ -60,14 +61,14 @@ def get_dealers_from_cf(url, **kwargs):
 def get_dealer_reviews_from_cf(url, id):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, id)
+    json_result = get_request(url, id=id)
     if json_result:
         # Get the row list in JSON as dealers
-        reviews = json_result["body"]
+        reviews = json_result["body"]["data"]["docs"]
         # For each dealer object
         for review in reviews:
             # Get its content in `doc` object
-            dealer_review_doc = review["doc"]
+            dealer_review_doc = review#["doc"]
             # Create a CarDealer object with values in `doc` object
             dealer_obj = DealerReview(dealership=dealer_review_doc["dealership"], name=dealer_review_doc["name"], review=dealer_review_doc["review"],
                                    id=dealer_review_doc["id"], purchase=dealer_review_doc["purchase"], purchase_date=dealer_review_doc["purchase_date"],
