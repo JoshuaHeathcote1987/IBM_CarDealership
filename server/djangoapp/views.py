@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import CarModel, CarMake, CarDealer, DealerReview
 # from .restapis import related methods
-from .restapis import get_dealers_from_cf,get_dealer_by_id_from_cf, get_dealer_reviews_from_cf, get_request
+from .restapis import get_dealers_from_cf,get_dealer_by_id_from_cf, get_dealer_reviews_from_cf, get_request,post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
 import logging
 import json
 from pprint import pprint
+import random
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -105,6 +106,10 @@ def get_dealer_details(request, id):
 
         dealer_url = "https://65ad4a99.eu-de.apigw.appdomain.cloud/car-dealerships/api/dealership"
         dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
+        if(not dealer):
+            return HttpResponseRedirect(reverse(viewname='djangoapp:get_dealerships'))
+        
+
         context["dealer"] = dealer
     
         review_url = "https://65ad4a99.eu-de.apigw.appdomain.cloud/car-dealerships/api/review"
@@ -125,6 +130,7 @@ def add_review(request, id):
         # Get cars for the dealer
         cars = CarModel.objects.all()
         context["cars"] = cars
+        context["dealer_id"] = id
         
         return render(request, 'djangoapp/add_review.html', context)
     elif request.method == 'POST':
@@ -137,7 +143,7 @@ def add_review(request, id):
             payload["time"] = datetime.utcnow().isoformat()
             payload["name"] = username
             payload["dealership"] = id
-            payload["id"] = id
+            payload["id"] = random.randint(20,999999)
             payload["review"] = request.POST["content"]
             payload["purchase"] = False
             if "purchasecheck" in request.POST:
@@ -152,5 +158,6 @@ def add_review(request, id):
             new_payload = {}
             new_payload["review"] = payload
             review_post_url = "https://65ad4a99.eu-de.apigw.appdomain.cloud/car-dealerships/api/review"
+            pprint(new_payload)
             post_request(review_post_url, new_payload, id=id)
         return redirect("djangoapp:dealer_details", id=id)      
