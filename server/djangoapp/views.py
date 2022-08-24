@@ -102,6 +102,7 @@ def get_dealerships(request):
 def get_dealer_details(request, id):
     if request.method == "GET":
         context = {}
+
         dealer_url = "https://65ad4a99.eu-de.apigw.appdomain.cloud/car-dealerships/api/dealership"
         dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
         context["dealer"] = dealer
@@ -109,8 +110,7 @@ def get_dealer_details(request, id):
         review_url = "https://65ad4a99.eu-de.apigw.appdomain.cloud/car-dealerships/api/review"
         reviews = get_dealer_reviews_from_cf(review_url, id=id)
         context["reviews"] = reviews
-        for review in reviews:
-            pprint(str(review))
+
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
@@ -124,7 +124,6 @@ def add_review(request, id):
     if request.method == 'GET':
         # Get cars for the dealer
         cars = CarModel.objects.all()
-        print(cars)
         context["cars"] = cars
         
         return render(request, 'djangoapp/add_review.html', context)
@@ -148,6 +147,7 @@ def add_review(request, id):
             payload["car_make"] = car.make.name
             payload["car_model"] = car.name
             payload["car_year"] = int(car.year.strftime("%Y"))
+
 
             new_payload = {}
             new_payload["review"] = payload

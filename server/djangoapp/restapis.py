@@ -107,7 +107,7 @@ def get_dealer_by_id_from_cf(url, id):
 
     if json_result:
         dealers = json_result["body"]
-        
+
     
         dealer_doc = dealers[0]
         dealer_obj = CarDealer(address=dealer_doc.get("address"), city=dealer_doc.get("city"),
