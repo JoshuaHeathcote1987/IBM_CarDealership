@@ -64,7 +64,7 @@ function main(params) {
     } else {
       // return all documents
       cloudant
-        .postAllDocs({ db: "dealerships", includeDocs: true, limit: 10 })
+        .postAllDocs({ db: "dealerships", includeDocs: true})
         .then((result) => {
           // console.log(result.result.rows);
           let code = 200;

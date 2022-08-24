@@ -50,10 +50,15 @@
             <div class="card" style="margin:5%">
                 <img src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" class="card-img-left" style="height: 40px; width: 40px; ">
                 <div class="card-body" style="text-align: left;">
-                    <h5 class="card-title">{{review.car_make}}, {{review.car_model}}</h5>
-                    <h5 class="card-title">{{review.purchase_date}}</h5>
-                    <p class="card-text">{{review.review}}</p>
-
+                    
+                    {% if review.car_make %}
+                        <h5 class="card-title">{{review.car_make}}, {{review.car_model}}</h5>
+                        <h5 class="card-title">{{review.purchase_date}}</h5>
+                        <p class="card-text">{{review.review}}</p>
+                        
+                    {% else %}
+                        <p class="card-text">{{review.review}}</p>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

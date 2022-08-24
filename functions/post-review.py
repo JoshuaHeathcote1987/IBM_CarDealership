@@ -15,7 +15,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 def main(dict):
     authenticator = IAMAuthenticator(dict['IAM_API_KEY'])
     service = CloudantV1(authenticator=authenticator)
-    service.set_service_url(dict['COUCH_URL')
+    service.set_service_url(dict['COUCH_URL'])
     response= service.post_document(db='reviews', document=dict["review"]).get_result()
     try:
     # result_by_filter=my_database.get_query_result(selector,raw_result=True)
